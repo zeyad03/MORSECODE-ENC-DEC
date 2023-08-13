@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>Morse Code</title>
+<script>
+
+function encdec(){
+	let str_input = document.getElementById("input").value.toUpperCase();
+	let operation = document.getElementById("operation").value;
+	
+	const mcode = {
+      'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+      'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+      'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+      'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+      'Y': '-.--', 'Z': '--..', ' ': ' ', '0': '-----',
+      '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....',
+      '6': '-....', '7': '--...', '8': '---..', '9': '----.',
+      '&': '.-...', "'": '.----.', '@': '.--.-.', ')': '-.--.-', '(': '-.--.',
+      ':': '---...', ',': '--..--', '=': '-...-', '!': '-.-.--', '.': '.-.-.-',
+      '-': '-....-', '+': '.-.-.', '"': '.-..-.', '?': '..--..', '/': '-..-.'
+    }
+	/*
+	write your JavaScript codes below
+	*/
+
+  let Ilst = [];    // Input list to store input data we looking for.
+  let Olst = [];    // Output list to store output data we going to print.
+  var error = 0;    // Error handling.
+  
+  // Encoding.
+  if (operation == "enc") {
+    // Split input into single letters.
+    Ilst = str_input.split('');
+
+    // Check if input exists in dictionary.
+    for (item=0; item<Ilst.length; item++) {
+      if (!(Ilst[item] in mcode)) {
+        error += 1;
+      }
+    }
+    
+    // If input exists, store in output list.
+    if (error == 0) {
+      for (elm=0; elm<Ilst.length; elm++) {
+        Olst.push(mcode[Ilst[elm]]);
+
+        // Handling extra space errors.
+        if (Ilst[elm] == ' ') {
+          Olst.splice(elm, 1, '');
+        }
+      }
+    } else {
+      alert('Invalid input');
+    }
+
+    // Pass stored output to answer to print with space between.
+    answer = Olst.join(' ');
+
+    // Decoding.
+  } else {
+
+    // Split input after each space.
+    Ilst = str_input.split(' ');
+    error = 0;  // Reset value of error to handle new errors.
+    
+    // Look for morse code in dictionary and get keys.
+    for (elm=0; elm<Ilst.length; elm++) {
+      Olst.push(Object.keys(mcode).find(key => mcode[key] === Ilst[elm]));
+      
+      // Check if output list is empty to print error message.
+      if (Olst == '') {
+        error += 1;
+      }
+      
+      // Add space in where space isn't identified.
+      if (Ilst[elm] == '') {
+        Olst.splice(elm, 1, ' ')
+      }
+    }
+
+    // Alert error message.
+    if (error >= 1) {
+      alert('Expected morse code!');
+      Olst = [];  // Reset output list to reuse again for new input.
+    }
+
+    // Pass stored output to answer to print without extra space in between.
+    answer = Olst.join('')
+  }
+
+  document.getElementById("output").innerHTML = answer;
+}
+
+</script>
+</head>
+<body>
+<H1>Morse code encoder/decoder</H1>
+<h3>@author: ZEYAD BASSYOUNI </h3>
+<div>
+<form>
+<p> Enter a string</p>
+<p> <textarea id="input" rows='5' cols='50'></textarea> </p>
+<p>
+<div id="optionloc" style="position:absolute; top:190px; left:240px;">
+<select id="operation">
+<option value="enc">Encode</option>
+<option value="dec">Decode</option>
+</select>
+</div>
+<div id="buttonloc" style="position:absolute; top:190px; left:320px;">
+<button type="button" id="submit" onclick=encdec()>Submit</button>
+</div>
+</p>
+
+<div>
+<p>Encoded/decoded Morse code: </p>
+<textarea id="output" rows='5' cols='50' readonly></textarea>
+</div>
+</form>
+</div>
+</body>
+</html>
